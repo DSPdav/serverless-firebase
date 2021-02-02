@@ -41,7 +41,7 @@ Your journey will be divided into two parts.
 2. At the end of the line you should see an <External_IP> address and an SSH button.
 3. Click **SSH**. A window will appear and you will see a **Linux instance shell** prompt.
 
-- Install Hugo locally
+### Install Hugo locally
 1. In the **Linux instance shell**, examine the file installhugo.sh by running `cat /tmp/installhugo.sh` and see the contents.
 Note: `wget` command to download Hugo and the `tar` command to unpack the Hugo archive.
 2. Enter the commands below:
@@ -51,7 +51,7 @@ Note: `wget` command to download Hugo and the `tar` command to unpack the Hugo a
     /tmp/installhugo.sh
 ```
 
-- Create a repository and the initial web site
+### Create a repository and the initial web site
 Now **create a Cloud Source Repository** to hold the web site and then clone the repository to the Linux instance. Cloning a repository creates a mirror of it in the shell. This allows you to implement the web site while in the shell and later commit your changes to the file system.
 1. Enter the following commands in the **Linux instance shell**:
 ```
@@ -83,7 +83,7 @@ Hugo will build the site and serve it for access on TCP port 8080. The server wi
 5. Open a browser tab and browse to `http://<EXTERNAL_IP>:8080`
 6. Go back to the Linux shell and press **Ctrl+C** to stop the Hugo server.
 
-- Add Firebase to your project
+### Add Firebase to your project
 1. Go to the Firebase console.
 2. Click **Add project**. You will be asked to select a name for your project. Click inside of the name field and select your existing Google Cloud project that starts with "qwiklabs-gcp-...".
 3. Accept the Firebase terms, then click **Continue**.
@@ -92,7 +92,7 @@ Hugo will build the site and serve it for access on TCP port 8080. The server wi
 6. You will be asked to confirm the use of Google Analytics for this Firebase project. Since this is a lab environment, use the toggle to disable Google Analytics and click **Add Firebase**.
 7. Click **Continue** if prompted after Firebase is added.
 
-- Deploy the site to Firebase
+### Deploy the site to Firebase
 1. Install Fireball CLI in the Linux instance shell:
 ```
     curl -sL https://firebase.tools | bash
@@ -113,7 +113,7 @@ If asked to overwrite any existing files, select **Y**.
 
 
 ## C. Automate the deployment
-- Perform the initial commit
+### Perform the initial commit
 The goal of building the pipeline is ***to be able to trigger builds when changes are made to the repository***.
 1. Configure the git commands global parameters by entering the commands below into the Linux shell:
 ```
@@ -133,7 +133,7 @@ The goal of building the pipeline is ***to be able to trigger builds when change
     git push -u origin master
 ```
 
-- Configure the build
+### Configure the build
 Cloud Build uses a file named `cloudbuild.yaml` in the root directory of the repository to perform the build. The file is in YAML format.
 1. Enter the command below in the Linux shell. Note the final period (".") at the end of the cp command:
 ```
@@ -151,20 +151,21 @@ Here are some observations about the `cloudbuild.yaml` file:
 - The file also uses a custom substitution variable (_HUGO_VERSION) and a Google-provided substitution variable (PROJECT_ID) to allow for this template to be used in different environments.
 - The Hugo and Firebase binaries are created and installed in a temporary directory so that they do not inadvertently get deployed to the website itself.
 
-- Create the Cloud Build trigger
+### Create the Cloud Build trigger
 Now create a trigger that will respond to commits to the master branch of the repository.
 1. In the Cloud Console, navigate to Navigation Menu > **Cloud Build** > **Triggers**.
 2. Click  **ADD TRIGGER**.
-3. For the trigger configuration, enter the following details:
-| Filed                                   | Value                                         |
-| --------------------------------------- | --------------------------------------------- |
-| Name                                    | commit-to-master-branch                       |
-| Description                             | Push to master                                |
-| Event                                   | Push to a branch                              |
-| Repository	                          | my_hugo_site                                  |
-| Branch (regex)	                      | ^master$ (be sure Invert Regex is unchecked)  |
-| Build Configuration	                  | Cloud Build configuration file (yaml or json) |
-| Cloud Build Configuration file location | / cloudbuild.yaml                             |
+3. For the trigger configuration, enter the following details.
+
+| **Filed** | **Value** |
+| :--- | :--- |
+| Name | commit-to-master-branch |
+| Description | Push to master |
+| Event | Push to a branch |
+| Repository | my_hugo_site |
+| Branch (regex) | ^master$ (be sure Invert Regex is unchecked) |
+| Build Configuration | Cloud Build configuration file (yaml or json) |
+| Cloud Build Configuration file location | / cloudbuild.yaml |
 
 4. Click **Create**.
 
@@ -173,7 +174,7 @@ The Cloud Build Service account needs to have permissions to use Firebase to dep
 1. From the Cloud Console Navigation menu, select **IAM & Admin** > **IAM**.
 2. Make sure you pick the service account `cloudbuild.gserviceaccount.com`. Click the **edit icon**, then click **ADD ANOTHER ROLE** and add the role **Firebase Products** > **Firebase Hosting Admin** to it.
 
-- Test the pipeline
+### Test the pipeline
 Now that you have created the pipeline, you can make a change to the site then commit it to see if the change propagates.
 1. In the Linux shell enter the command below to move to the repository directory:
 ```
